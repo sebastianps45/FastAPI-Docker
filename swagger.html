@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swagger - Generador de Cédula</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css" />
+    <style>
+      html {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
+      }
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        font-family: Arial, sans-serif;
+      }
+      #swagger-ui {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px 40px;
+      }
+      .topbar {
+        background-color: #1f2937;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-standalone-preset.js"></script>
+    <script>
+      const spec = {
+        openapi: "3.0.3",
+        info: {
+          title: "Generador de cédula",
+          version: "1.0.0",
+          description: "API para generar un número de cédula aleatorio de 10 dígitos en el rango 1000000000 - 9999999999."
+        },
+        servers: [
+          {
+            url: "http://localhost:8000",
+            description: "Servidor local Docker"
+          }
+        ],
+        paths: {
+          "/obtenercedula": {
+            get: {
+              summary: "Obtener una cédula aleatoria",
+              description: "Devuelve un número entero aleatorio de 10 dígitos entre 1000000000 y 9999999999.",
+              operationId: "obtenerCedula",
+              responses: {
+                "200": {
+                  description: "Respuesta exitosa",
+                  content: {
+                    "application/json": {
+                      schema: {
+                        type: "object",
+                        properties: {
+                          cedula: {
+                            type: "integer",
+                            example: 8020213910,
+                            description: "Número aleatorio de 10 dígitos"
+                          }
+                        },
+                        required: ["cedula"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+
+      window.onload = () => {
+        window.ui = SwaggerUIBundle({
+          spec,
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+          ],
+          plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+          layout: "StandaloneLayout"
+        });
+      };
+    </script>
+  </body>
+</html>
