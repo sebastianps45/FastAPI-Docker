@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import random
+from pydantic import BaseModel
 
 app = FastAPI(title="Generador de cédula")
 
@@ -14,3 +15,13 @@ def obtener_cedula() -> dict:
 def doblar_numero(n: int) -> dict:
     """Recibe un número entero `n` y devuelve el número multiplicado por 2."""
     return {"resultado": n * 2}
+
+
+class NumberPayload(BaseModel):
+    n: int
+
+
+@app.post("/doblar_json")
+def doblar_numero_json(payload: NumberPayload) -> dict:
+    """Recibe JSON `{ "n": <int> }` y devuelve `{ "resultado": n*2 }`."""
+    return {"resultado": payload.n * 2}
